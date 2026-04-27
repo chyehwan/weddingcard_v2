@@ -335,6 +335,15 @@
       font-family: var(--playfair);
       font-size: 20px;
       color: var(--text);
+      margin-bottom: 5px;
+    }
+
+    .couple-parents {
+      font-family: var(--serif);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.3px;
+      line-height: 1.6;
     }
 
     /* ===== GREETING ===== */
@@ -549,72 +558,124 @@
       margin-top: 14px;
     }
 
-    /* ===== CONTACT ===== */
-    #contact {
+    /* ===== ACCOUNT ===== */
+    #account {
       text-align: center;
       border-bottom: none;
       background: linear-gradient(to bottom, #ffffff 0%, #f0ebe6 100%);
     }
 
-    .contact-grid {
+    .account-desc {
+      font-family: var(--serif);
+      font-size: 13px;
+      color: #999;
+      line-height: 2;
+      margin-bottom: 28px;
+    }
+
+    .account-accordions {
       display: flex;
-      gap: 14px;
+      flex-direction: column;
+      gap: 10px;
+      text-align: left;
     }
 
-    .contact-item {
-      flex: 1;
+    .account-accordion {
+      border-radius: 10px;
+      overflow: hidden;
       border: 0.5px solid var(--border);
-      border-radius: 12px;
-      padding: 18px 10px;
-      background: #fafaf9;
     }
 
-    .contact-role {
+    .account-accordion-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      background: #e8dfd6;
+      border: none;
+      cursor: pointer;
+      font-family: var(--playfair);
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .accordion-chevron {
+      font-size: 13px;
+      color: #999;
+      transition: transform 0.3s ease;
+      display: inline-block;
+    }
+
+    .account-accordion-header.open .accordion-chevron {
+      transform: rotate(180deg);
+    }
+
+    .account-accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+      background: #fff;
+    }
+
+    .account-accordion-body.open {
+      max-height: 400px;
+    }
+
+    .account-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-top: 0.5px solid var(--border);
+    }
+
+    .account-row-number {
+      font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+      font-size: 14px;
+      color: #999;
+      margin-bottom: 4px;
+    }
+
+    .account-bank {
+      color: #999;
+    }
+
+    .account-bank-divider {
+      color: #ccc;
+      margin: 0 6px;
+    }
+
+    .account-row-holder {
+      font-family: var(--serif);
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .account-copy-btn {
+      flex-shrink: 0;
+      padding: 7px 12px;
+      border: 0.5px solid #ccc;
+      border-radius: 6px;
+      background: #fff;
       font-family: var(--serif);
       font-size: 12px;
-      color: var(--muted);
-      letter-spacing: 2px;
-      margin-bottom: 7px;
+      color: #888;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      white-space: nowrap;
     }
 
-    .contact-name {
-      font-family: var(--playfair);
-      font-size: 18px;
-      color: var(--text);
-      margin-bottom: 5px;
-    }
-
-    .contact-number {
-      font-family: var(--serif);
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 14px;
-    }
-
-    .contact-btn {
-      display: flex;
-      height: 32px;
-      border-radius: 6px;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      font-family: var(--serif);
-      font-size: 11px;
-      letter-spacing: 1px;
+    .account-copy-btn:hover {
+      background: var(--text);
       color: #fff;
-      transition: opacity 0.2s;
+      border-color: var(--text);
     }
 
-    .contact-btn:hover { opacity: 0.85; }
-    .contact-btn-groom { background: var(--text); }
-    .contact-btn-bride { background: var(--accent); }
-
-    .contact-footer {
-      font-family: var(--serif);
-      font-size: 10px;
-      color: #ddd;
-      letter-spacing: 2px;
-      margin-top: 32px;
+    .account-copy-btn.copied {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
     }
 
     @media (min-width: 480px) {
@@ -669,6 +730,7 @@
         <div>
           <p class="couple-role">GROOM</p>
           <p class="couple-name">최예환</p>
+          <p class="couple-parents">최의섭 · 서지희의 아들</p>
         </div>
       </div>
       <p class="couple-heart" aria-hidden="true">♥</p>
@@ -681,6 +743,7 @@
         <div>
           <p class="couple-role">BRIDE</p>
           <p class="couple-name">곽유진</p>
+          <p class="couple-parents">곽장영 · 아리가 가요꼬의 딸</p>
         </div>
       </div>
     </div>
@@ -732,23 +795,44 @@
     <p class="venue-name">서울 종로구 서촌<br>까델루뽀 Ca'del lupo</p>
   </section>
 
-  <!-- CONTACT -->
-  <section id="contact" class="section fade-up">
-    <p class="section-label">Contact</p>
+  <!-- ACCOUNT -->
+  <section id="account" class="section fade-up">
+    <p class="section-label">마음 전하실 곳</p>
     <div class="thin-divider"></div>
-    <div class="contact-grid">
-      <div class="contact-item">
-        <p class="contact-role">GROOM</p>
-        <p class="contact-name">최예환</p>
-        <p class="contact-number">010-5636-6449</p>
-        <a href="tel:01056366449" class="contact-btn contact-btn-groom">연락하기</a>
+    <div class="account-accordions">
+
+      <div class="account-accordion">
+        <button class="account-accordion-header open" onclick="toggleAccordion(this)">
+          <span>신랑측 계좌번호</span>
+          <span class="accordion-chevron">∨</span>
+        </button>
+        <div class="account-accordion-body open">
+          <div class="account-row">
+            <div>
+              <p class="account-row-number"><span class="account-bank">신한은행</span><span class="account-bank-divider">|</span>110-462-976192</p>
+              <p class="account-row-holder">신랑 父 최의섭</p>
+            </div>
+            <button class="account-copy-btn" onclick="copyAccount(this, '110-462-976192')">&#128203; 복사하기</button>
+          </div>
+        </div>
       </div>
-      <div class="contact-item">
-        <p class="contact-role">BRIDE</p>
-        <p class="contact-name">곽유진</p>
-        <p class="contact-number">010-4334-7248</p>
-        <a href="tel:01043347248" class="contact-btn contact-btn-bride">연락하기</a>
+
+      <div class="account-accordion">
+        <button class="account-accordion-header" onclick="toggleAccordion(this)">
+          <span>신부측 계좌번호</span>
+          <span class="accordion-chevron">∨</span>
+        </button>
+        <div class="account-accordion-body">
+          <div class="account-row">
+            <div>
+              <p class="account-row-number"><span class="account-bank">우리은행</span><span class="account-bank-divider">|</span>304-068357-02-004</p>
+              <p class="account-row-holder">신부 父 곽장영</p>
+            </div>
+            <button class="account-copy-btn" onclick="copyAccount(this, '304-068357-02-004')">&#128203; 복사하기</button>
+          </div>
+        </div>
       </div>
+
     </div>
   </section>
 
@@ -757,9 +841,7 @@
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="갤러리">
   <button class="lightbox-close" id="lb-close" aria-label="닫기">×</button>
-  <button class="lightbox-nav lightbox-prev" id="lb-prev" aria-label="이전">&#8249;</button>
   <img class="lightbox-img" id="lb-img" src="" alt="">
-  <button class="lightbox-nav lightbox-next" id="lb-next" aria-label="다음">&#8250;</button>
   <p class="lightbox-counter" id="lb-counter"></p>
 </div>
 
@@ -817,14 +899,20 @@
   }
 
   document.getElementById('lb-close').addEventListener('click', closeLightbox);
-  document.getElementById('lb-prev').addEventListener('click', () => navigate(-1));
-  document.getElementById('lb-next').addEventListener('click', () => navigate(1));
   lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
   document.addEventListener('keydown', e => {
     if (!lb.classList.contains('open')) return;
     if (e.key === 'Escape')     closeLightbox();
     if (e.key === 'ArrowLeft')  navigate(-1);
     if (e.key === 'ArrowRight') navigate(1);
+  });
+
+  // Swipe
+  let touchStartX = 0;
+  lb.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) navigate(diff > 0 ? 1 : -1);
   });
 
   // Fade-up on scroll
@@ -838,6 +926,24 @@
   }, { threshold: 0.1 });
 
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  function toggleAccordion(header) {
+    const body = header.nextElementSibling;
+    const isOpen = header.classList.contains('open');
+    header.classList.toggle('open', !isOpen);
+    body.classList.toggle('open', !isOpen);
+  }
+
+  function copyAccount(btn, number) {
+    navigator.clipboard.writeText(number).then(() => {
+      btn.textContent = '✓ 복사됨';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.innerHTML = '&#128203; 복사하기';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
 </script>
 </body>
 </html>
