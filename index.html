@@ -10,7 +10,7 @@
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400&family=Dancing+Script:wght@600&family=Caveat:wght@400;600&family=Gaegu:wght@400;700&family=Playfair+Display:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400&family=Dancing+Script:wght@600&family=Caveat:wght@400;600&family=Gaegu:wght@400;700&family=Playfair+Display:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Noto+Serif+KR:wght@300;400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -21,7 +21,7 @@
       --border: #ece8e4;
       --placeholder-bg: #f5f0ee;
       --placeholder-border: #e0d8d4;
-      --serif: 'Cormorant Garamond', serif;
+      --serif: 'Cormorant Garamond', 'Noto Serif KR', serif;
       --display: 'Cinzel Decorative', serif;
       --script: 'Dancing Script', cursive;
       --playfair: 'Playfair Display', serif;
@@ -501,11 +501,12 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.92);
+      background: #f0ebe6;
       z-index: 9999;
       align-items: center;
       justify-content: center;
       flex-direction: column;
+      overflow: hidden;
     }
 
     .lightbox.open {
@@ -517,6 +518,7 @@
       max-height: 80svh;
       object-fit: contain;
       border-radius: 4px;
+      transition: transform 0.25s ease, opacity 0.25s ease;
     }
 
     .lightbox-close {
@@ -524,36 +526,19 @@
       top: 20px;
       right: 24px;
       font-size: 32px;
-      color: rgba(255,255,255,0.7);
+      color: rgba(0,0,0,0.35);
       cursor: pointer;
       background: none;
       border: none;
       line-height: 1;
     }
 
-    .lightbox-close:hover { color: #fff; }
-
-    .lightbox-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 36px;
-      color: rgba(255,255,255,0.6);
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 16px;
-      line-height: 1;
-    }
-
-    .lightbox-nav:hover { color: #fff; }
-    .lightbox-prev { left: 4px; }
-    .lightbox-next { right: 4px; }
+    .lightbox-close:hover { color: var(--text); }
 
     .lightbox-counter {
       font-family: var(--serif);
       font-size: 12px;
-      color: rgba(255,255,255,0.4);
+      color: #bbb;
       letter-spacing: 2px;
       margin-top: 14px;
     }
@@ -631,7 +616,7 @@
     }
 
     .account-row-number {
-      font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 14px;
       color: #999;
       margin-bottom: 4px;
@@ -891,11 +876,35 @@
     document.body.style.overflow = '';
   }
 
+  let isAnimating = false;
+
   function navigate(dir) {
-    current = (current + dir + images.length) % images.length;
-    lbImg.src = images[current].src;
-    lbImg.alt = images[current].alt;
-    lbCounter.textContent = `${current + 1} / ${images.length}`;
+    if (isAnimating) return;
+    isAnimating = true;
+
+    const outX = dir > 0 ? '-80px' : '80px';
+    const inX  = dir > 0 ?  '80px' : '-80px';
+
+    lbImg.style.transform = `translateX(${outX})`;
+    lbImg.style.opacity = '0';
+
+    setTimeout(() => {
+      current = (current + dir + images.length) % images.length;
+      lbImg.src = images[current].src;
+      lbImg.alt = images[current].alt;
+      lbCounter.textContent = `${current + 1} / ${images.length}`;
+
+      lbImg.style.transition = 'none';
+      lbImg.style.transform = `translateX(${inX})`;
+      lbImg.style.opacity = '0';
+
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        lbImg.style.transition = 'transform 0.25s ease, opacity 0.25s ease';
+        lbImg.style.transform = 'translateX(0)';
+        lbImg.style.opacity = '1';
+        isAnimating = false;
+      }));
+    }, 220);
   }
 
   document.getElementById('lb-close').addEventListener('click', closeLightbox);
