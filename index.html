@@ -472,8 +472,26 @@
 
     .gallery-grid {
       display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .gallery-grid-bottom {
+      display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 6px;
+      margin-top: 6px;
+    }
+
+    .gallery-grid-square {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .gallery-grid-bottom .gallery-item {
+      aspect-ratio: 3 / 2;
     }
 
     .gallery-item {
@@ -777,6 +795,8 @@
     </div>
     <div class="red-divider" style="margin:40px auto;"></div>
     <div class="gallery-grid" id="gallery-grid"></div>
+    <div class="gallery-grid-bottom" id="gallery-grid-bottom"></div>
+    <div class="gallery-grid-square" id="gallery-grid-square"></div>
   </section>
 
   <!-- DATE & VENUE -->
@@ -838,7 +858,7 @@
 </div>
 
 <script>
-  const GALLERY_COUNT = 6;
+  const GALLERY_COUNT = 10;
   const images = Array.from({ length: GALLERY_COUNT }, (_, i) => ({
     src: `/images/gallery-${i + 1}.jpg`,
     alt: `갤러리 사진 ${i + 1}`
@@ -853,14 +873,34 @@
     slider.appendChild(item);
   });
 
-  // Build gallery
+  // Build gallery top (images 1–6, 3열)
   const grid = document.getElementById('gallery-grid');
-  images.forEach((img, idx) => {
+  images.slice(0, 6).forEach((img, idx) => {
     const item = document.createElement('div');
     item.className = 'gallery-item';
     item.innerHTML = `<img src="${img.src}" alt="${img.alt}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"><span class="gallery-num" style="display:none">${idx + 1}</span>`;
     item.addEventListener('click', () => openLightbox(idx));
     grid.appendChild(item);
+  });
+
+  // Build gallery bottom (images 7–8, 2열 3:2 비율)
+  const gridBottom = document.getElementById('gallery-grid-bottom');
+  images.slice(6, 8).forEach((img, idx) => {
+    const item = document.createElement('div');
+    item.className = 'gallery-item';
+    item.innerHTML = `<img src="${img.src}" alt="${img.alt}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"><span class="gallery-num" style="display:none">${idx + 7}</span>`;
+    item.addEventListener('click', () => openLightbox(idx + 6));
+    gridBottom.appendChild(item);
+  });
+
+  // Build gallery square (images 9–10, 2열 1:1 비율)
+  const gridSquare = document.getElementById('gallery-grid-square');
+  images.slice(8).forEach((img, idx) => {
+    const item = document.createElement('div');
+    item.className = 'gallery-item';
+    item.innerHTML = `<img src="${img.src}" alt="${img.alt}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"><span class="gallery-num" style="display:none">${idx + 9}</span>`;
+    item.addEventListener('click', () => openLightbox(idx + 8));
+    gridSquare.appendChild(item);
   });
 
   // Lightbox
