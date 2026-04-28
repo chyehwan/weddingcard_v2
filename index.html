@@ -476,23 +476,33 @@
       gap: 6px;
     }
 
-    .gallery-grid-bottom {
+    .gallery-grid-mosaic {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 6px;
       margin-top: 6px;
     }
 
-    .gallery-grid-square {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 6px;
-      margin-top: 6px;
+    .gallery-mosaic-item {
+      border-radius: 5px;
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--placeholder-bg);
+      border: 0.5px solid var(--placeholder-border);
     }
 
-    .gallery-grid-bottom .gallery-item {
-      aspect-ratio: 3 / 2;
+    .gallery-mosaic-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
     }
+
+    .gallery-mosaic-item:hover img { transform: scale(1.05); }
+    .gallery-mosaic-wide   { aspect-ratio: 4 / 3; grid-column: span 2; }
+    .gallery-mosaic-square { aspect-ratio: 2 / 3; }
+    .gallery-grid-mosaic .gallery-mosaic-item:nth-child(2) img { object-position: right center; }
 
     .gallery-item {
       aspect-ratio: 1;
@@ -795,8 +805,7 @@
     </div>
     <div class="red-divider" style="margin:40px auto;"></div>
     <div class="gallery-grid" id="gallery-grid"></div>
-    <div class="gallery-grid-bottom" id="gallery-grid-bottom"></div>
-    <div class="gallery-grid-square" id="gallery-grid-square"></div>
+    <div class="gallery-grid-mosaic" id="gallery-grid-mosaic"></div>
   </section>
 
   <!-- DATE & VENUE -->
@@ -883,24 +892,20 @@
     grid.appendChild(item);
   });
 
-  // Build gallery bottom (images 7–8, 2열 3:2 비율)
-  const gridBottom = document.getElementById('gallery-grid-bottom');
-  images.slice(6, 8).forEach((img, idx) => {
+  // Build gallery mosaic (7,9,10,8 순서 / 7·8=wide, 9·10=square)
+  const mosaicOrder = [
+    { img: images[6], idx: 6, type: 'wide'   },
+    { img: images[9], idx: 9, type: 'square' },
+    { img: images[8], idx: 8, type: 'square' },
+    { img: images[7], idx: 7, type: 'wide'   },
+  ];
+  const mosaic = document.getElementById('gallery-grid-mosaic');
+  mosaicOrder.forEach(({ img, idx, type }) => {
     const item = document.createElement('div');
-    item.className = 'gallery-item';
-    item.innerHTML = `<img src="${img.src}" alt="${img.alt}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"><span class="gallery-num" style="display:none">${idx + 7}</span>`;
-    item.addEventListener('click', () => openLightbox(idx + 6));
-    gridBottom.appendChild(item);
-  });
-
-  // Build gallery square (images 9–10, 2열 1:1 비율)
-  const gridSquare = document.getElementById('gallery-grid-square');
-  images.slice(8).forEach((img, idx) => {
-    const item = document.createElement('div');
-    item.className = 'gallery-item';
-    item.innerHTML = `<img src="${img.src}" alt="${img.alt}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"><span class="gallery-num" style="display:none">${idx + 9}</span>`;
-    item.addEventListener('click', () => openLightbox(idx + 8));
-    gridSquare.appendChild(item);
+    item.className = `gallery-mosaic-item gallery-mosaic-${type}`;
+    item.innerHTML = `<img src="${img.src}" alt="${img.alt}" loading="lazy" onerror="this.style.display='none'">`;
+    item.addEventListener('click', () => openLightbox(idx));
+    mosaic.appendChild(item);
   });
 
   // Lightbox
